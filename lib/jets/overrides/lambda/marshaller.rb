@@ -16,6 +16,8 @@ module AwsLambda
       # Finally, StringIO/IO is used to signal a response that shouldn't be
       # formatted as JSON, and should get a different content-type header.
       def marshall_response(method_response)
+        p "method_response class: #{method_response.class}"
+        p "method_response: #{method_response.inspect}"
         case method_response
         when StringIO, IO
           [method_response, "application/unknown"]
