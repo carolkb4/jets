@@ -29,7 +29,9 @@ module AwsLambda
             if method_response.is_a?(Hash)
               method_response.deep_transform_values! do |v|
                 if v.respond_to?(:force_encoding) && !v.frozen?
+                  p "retorno original: #{v}"
                   v.force_encoding('ISO-8859-1').encode('UTF-8')
+                  p "retorno convertido: #{v.force_encoding('ISO-8859-1').encode('UTF-8')}"
                 else
                   v # IE: Integer
                 end
