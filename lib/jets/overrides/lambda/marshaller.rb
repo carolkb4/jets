@@ -16,7 +16,6 @@ module AwsLambda
       # Finally, StringIO/IO is used to signal a response that shouldn't be
       # formatted as JSON, and should get a different content-type header.
       def marshall_response(method_response)
-        p "method_response: #{method_response.inspect}"
         case method_response
         when StringIO, IO
           [method_response, 'application/unknown']
@@ -27,7 +26,15 @@ module AwsLambda
           begin
             JSON.dump(method_response)
           rescue JSON::GeneratorError
-            JSON.dump(method_response.force_encoding('ISO-8859-1').encode('UTF-8'))
+            if method_response.is_a?(Hash)
+              method_response.deep_transform_values! do |v|
+                if v.respond_to?(:force_encoding) && !v.frozen?
+                  v.force_encoding('ISO-8859-1').encode('UTF-8')
+                else
+                  v # IE: Integer
+                end
+              end
+            end
           end
         end
       end
