@@ -1,4 +1,4 @@
-require "json"
+require 'json'
 
 # Hack AwsLambda Ruby Runtime to fix .to_json issue collision with ActiveSupport.
 # To reproduce:
@@ -16,16 +16,19 @@ module AwsLambda
       # Finally, StringIO/IO is used to signal a response that shouldn't be
       # formatted as JSON, and should get a different content-type header.
       def marshall_response(method_response)
-        p "method_response class: #{method_response.class}"
         p "method_response: #{method_response.inspect}"
         case method_response
         when StringIO, IO
-          [method_response, "application/unknown"]
+          [method_response, 'application/unknown']
         else
-          # Note: Removed previous code which did force_encoding("ISO-8859-1").encode("UTF-8")
+          # NOTE: Removed previous code which did force_encoding("ISO-8859-1").encode("UTF-8")
           # It caused issues with international characters.
           # It does not seem like we need the force_encoding anymore.
-          JSON.dump(method_response)
+          begin
+            JSON.dump(method_response)
+          rescue JSON::GeneratorError
+            JSON.dump(method_response.force_encoding('ISO-8859-1').encode('UTF-8'))
+          end
         end
       end
     end
