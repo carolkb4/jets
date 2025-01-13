@@ -28,10 +28,10 @@ module Jets::Controller::Request::Compat
     def parameters(include_path_params: true, include_body_params: true)
       params = {}
       if include_body_params
-        params = if request_parameters.is_a?(Array)
-                   params.deep_merge({ _json: request_parameters })
+        params = if body_params.is_a?(Array)
+                   params.deep_merge({ _json: body_params })
                  else
-                   params.deep_merge(request_parameters)
+                   params.deep_merge(body_params)
                  end
       end
       p "params: #{params}"
