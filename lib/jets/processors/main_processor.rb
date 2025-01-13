@@ -17,7 +17,7 @@ class Jets::Processors::MainProcessor
     #   deducer = Jets::Processors::Deducer.new("handlers/controllers/posts.create")
     #
     deducer = Jets::Processors::Deducer.new(handler)
-    begin
+    # begin
       # Examples:
       #   deducer.code => PostsController.process(event, context, "show")
       #   deducer.path => app/controllers/posts_controller.rb
@@ -46,9 +46,9 @@ class Jets::Processors::MainProcessor
     # Additional rescue Exception as a paranoid measure.  We want to make sure
     # that we always report the exception.  This is the last line of defense.
     # Note: This only happens when the code is running in Lambda.
-    rescue => exception
-      Jets.report_exception(exception)
-      raise(exception)
-    end
+    # rescue => exception
+    #   Jets.report_exception(exception)
+    #   raise(exception)
+    # end
   end
 end
