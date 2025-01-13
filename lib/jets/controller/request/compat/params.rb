@@ -27,7 +27,7 @@ module Jets::Controller::Request::Compat
     #   3. body parameters
     def parameters(include_path_params: true, include_body_params: true)
       params = {}
-      params = params.deep_merge(request_parameters) if include_body_params
+      params = params.deep_merge(body_params) if body_parameters && !body_parameters.is_a?(Array)
       params = params.deep_merge(unescape_recursively(query_parameters)) # always
       params = params.deep_merge(path_parameters) if include_path_params
       params = set_binary_encoding(params)
