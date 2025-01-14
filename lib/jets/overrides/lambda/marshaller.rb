@@ -23,21 +23,7 @@ module AwsLambda
           # NOTE: Removed previous code which did force_encoding("ISO-8859-1").encode("UTF-8")
           # It caused issues with international characters.
           # It does not seem like we need the force_encoding anymore.
-          begin
-            JSON.dump(method_response)
-          rescue JSON::GeneratorError
-            if method_response.is_a?(Hash)
-              method_response.deep_transform_values! do |v|
-                if v.respond_to?(:force_encoding) && !v.frozen?
-                  p "retorno original: #{v}"
-                  v.force_encoding('ISO-8859-1').encode('UTF-8')
-                  p "retorno convertido: #{v.force_encoding('ISO-8859-1').encode('UTF-8')}"
-                else
-                  v # IE: Integer
-                end
-              end
-            end
-          end
+          JSON.dump(method_response)
         end
       end
     end
