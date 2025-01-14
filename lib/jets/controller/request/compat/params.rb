@@ -123,7 +123,8 @@ module Jets::Controller::Request::Compat
     end
 
     def parse_json(text)
-      JSON.parse(text)
+      json = JSON.parse(text)
+      json.is_a?(Hash) ? json : { _json: json }
     rescue JSON::ParserError
       nil
     end
