@@ -101,7 +101,7 @@ module Jets::Controller::Request::Compat
 
     # jets specific
     def request_method_from_hidden_method_field
-      get_request_parameters["_method"].to_s.upcase if get_request_parameters["_method"]
+      get_request_parameters['_method'].to_s.upcase if get_request_parameters.try(:key?, '_method')
     end
 
   private
