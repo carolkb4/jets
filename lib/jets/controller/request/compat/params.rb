@@ -28,7 +28,7 @@ module Jets::Controller::Request::Compat
     def parameters(include_path_params: true, include_body_params: true)
       params = {}
 
-      p 'printing params'
+      p "printing params"
 
       if include_body_params
         params = if request_parameters.is_a?(Array)
@@ -40,7 +40,9 @@ module Jets::Controller::Request::Compat
       params = params.deep_merge(unescape_recursively(query_parameters)) # always
       params = params.deep_merge(path_parameters) if include_path_params
       params = set_binary_encoding(params)
-      normalize_encode_params(params)
+      params = normalize_encode_params(params)
+      p "params: #{params.inspect}"
+      params
     end
     memoize :parameters
     alias params parameters
