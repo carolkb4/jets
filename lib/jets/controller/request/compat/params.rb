@@ -28,6 +28,8 @@ module Jets::Controller::Request::Compat
     def parameters(include_path_params: true, include_body_params: true)
       params = {}
 
+      p 'printing params'
+
       if include_body_params
         params = if request_parameters.is_a?(Array)
                    params.deep_merge({ _json: request_parameters })
