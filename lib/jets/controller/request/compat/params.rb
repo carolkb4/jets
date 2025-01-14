@@ -27,21 +27,11 @@ module Jets::Controller::Request::Compat
     #   3. body parameters
     def parameters(include_path_params: true, include_body_params: true)
       params = {}
-
-      p "printing params"
-
-      if include_body_params
-        params = if request_parameters.is_a?(Array)
-                   params.deep_merge({ _json: request_parameters })
-                 else
-                   params.deep_merge(request_parameters)
-                 end
-      end
+      params = params.deep_merge(request_parameters) if include_body_params
       params = params.deep_merge(unescape_recursively(query_parameters)) # always
       params = params.deep_merge(path_parameters) if include_path_params
       params = set_binary_encoding(params)
       params = normalize_encode_params(params)
-      p "params: #{params.inspect}"
       params
     end
     memoize :parameters
@@ -135,7 +125,8 @@ module Jets::Controller::Request::Compat
     end
 
     def parse_json(text)
-      JSON.parse(text)
+      json = JSON.parse(text)
+      json.is_a?(Hash) ? json : { _json: json }
     rescue JSON::ParserError
       nil
     end
